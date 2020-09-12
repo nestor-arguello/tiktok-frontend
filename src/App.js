@@ -1,31 +1,44 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import './App.css';
+import axios from './apis/posts.instance';
 import Video from './components/video';
 
 function App() {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get('v2/posts');
+
+        setPosts(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
+  const videoComponents = posts.map(
+    ({ _id, url, channel, description, song, likes, shares, messages }) => (
+      <Video
+        key={_id}
+        url={url}
+        channel={channel}
+        description={description}
+        song={song}
+        likes={likes}
+        shares={shares}
+        messages={messages}
+      />
+    )
+  );
+
   return (
     <div className="app">
-      <div className="app__videos">
-        <Video
-          url="https://assets.mixkit.co/videos/preview/mixkit-urban-trendy-girls-portrait-at-night-1231-large.mp4"
-          channel="shantilli"
-          description="Some description text"
-          song="So Lonely - The Police"
-          likes={122}
-          shares={12}
-          messages={33}
-        />
-        <Video
-          url="https://assets.mixkit.co/videos/preview/mixkit-motionless-woman-sitting-on-the-floor-watching-mechanical-flying-chairs-2824-large.mp4"
-          channel="gilmore"
-          description="This is it"
-          song="Comfortably numb - Pink Floyd"
-          likes={233}
-          shares={34}
-          messages={345}
-        />
-      </div>
+      <div className="app__videos">{videoComponents}</div>
     </div>
   );
 }
