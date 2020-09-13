@@ -33,7 +33,7 @@ html {
   height: 90%;
   border-radius: 20px;
   overflow: scroll;
-  width: 80%;
+  width: 90%;
   max-width: 500px;
   scroll-snap-type: y mandatory;
 }
