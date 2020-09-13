@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import GitHubIcon from '@material-ui/icons/GitHub';
 
 import './App.css';
 import axios from './apis/posts.instance';
@@ -36,9 +37,28 @@ function App() {
     )
   );
 
+  const thisYear = new Date().getFullYear();
+
   return (
     <div className="app">
+      <div className="app__header">
+        <p className="app__name">Tik Tak</p>
+        <div className="app__githubLogo">
+          <a
+            href="https://github.com/nestor-arguello/tiktok-frontend"
+            title="Go to repository"
+          >
+            <GitHubIcon />
+          </a>
+        </div>
+      </div>
       <div className="app__videos">{videoComponents}</div>
+      <div className="app__footer">
+        <p>
+          © {thisYear}, developed with ♥ by{' '}
+          <a href="https://nestor-arguello.github.io">Néstor Argüello</a>
+        </p>
+      </div>
     </div>
   );
 }
