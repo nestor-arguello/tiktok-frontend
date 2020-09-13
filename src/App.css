@@ -18,6 +18,7 @@ code {
 
 html {
   scroll-snap-type: y mandatory;
+  height: 100%;
 }
 
 .app {
@@ -29,7 +30,7 @@ html {
 
 .app__videos {
   position: relative;
-  height: 800px;
+  height: 90%;
   border-radius: 20px;
   overflow: scroll;
   width: 80%;

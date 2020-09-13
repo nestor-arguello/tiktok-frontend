@@ -1,12 +1,21 @@
 .videoSidebar {
   position: absolute;
-  top: 50%;
-  right: 10px;
+  bottom: 100px;
+  right: 0;
   color: white;
 }
 
 .videoSidebar__button {
-  padding: 20px;
+  padding: 10px 20px;
   text-align: center;
   cursor: pointer;
+  outline: 0;
+  outline: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }

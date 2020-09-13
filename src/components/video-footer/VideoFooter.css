@@ -1,7 +1,7 @@
 .videoFooter {
   position: relative;
   bottom: 150px;
-  margin-left: 40px;
+  margin-left: 24px;
   color: white;
   display: flex;
 }
@@ -20,6 +20,7 @@
 
 .videoFooter__icon {
   position: absolute;
+  bottom: -4px;
 }
 
 .videoFooter__ticker > .ticker {
@@ -29,11 +30,11 @@
 }
 
 .videoFooter__record {
-  height: 50px;
+  height: 40px;
   filter: invert(1);
   position: absolute;
-  bottom: 0;
-  right: 20px;
+  bottom: -13px;
+  right: 18px;
   animation: spinTheRecord infinite 5s linear;
 }
 
