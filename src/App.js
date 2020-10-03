@@ -6,6 +6,7 @@ import useLastPostObserver from './hooks/useLastPostObserver';
 import './App.css';
 
 import Videos from './components/videos';
+import LoadingVideo from './components/loading-video';
 
 const Error = () => (
   <p className="app__error">
@@ -49,6 +50,8 @@ function App() {
       <div ref={scrollAreaRef} className={`app__videos ${videoClass}`}>
         {error ? (
           <Error />
+        ) : loading && !posts.length ? (
+          <LoadingVideo loading={loading} />
         ) : (
           <Videos
             posts={posts}
