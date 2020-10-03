@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import useFetchPosts from './hooks/useFetchPosts';
 import useLastPostObserver from './hooks/useLastPostObserver';
@@ -12,12 +12,6 @@ const Error = () => (
     Something went wrong. Please try to refresh the page.
   </p>
 );
-
-/**
- * TODO:
- * #1  last post animation
- * #2  center tik tak name
- */
 
 function App() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,7 +27,6 @@ function App() {
   });
 
   const handleVideoLoaded = () => {
-    console.log('video loaded!');
     setAllVideosLoaded(prevLoaded => [...prevLoaded, true]);
   };
 

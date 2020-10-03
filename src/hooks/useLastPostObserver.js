@@ -23,12 +23,7 @@ const useLastPostObserver = ({
           threshold: 1,
           root: scrollAreaRef.current,
         };
-        console.log(node);
         observer.current = new IntersectionObserver(entries => {
-          console.log(
-            'video has fully entered in the root',
-            entries[0].isIntersecting
-          );
           if (entries[0].isIntersecting && hasMore) {
             setCurrentPage(prevPage => ++prevPage);
           }

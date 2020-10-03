@@ -38,6 +38,7 @@ html {
   display: flex;
   width: 90%;
   justify-content: space-between;
+  align-items: center;
   padding: 12px 0;
   font-size: 16px;
   font-weight: 600;

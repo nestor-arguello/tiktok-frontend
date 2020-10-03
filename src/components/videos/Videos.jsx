@@ -11,7 +11,6 @@ const Videos = ({
   ...props
 }) => {
   return posts.map(({ _id, ...props }, index) => {
-    console.log(allVideosLoaded[index]);
     if (index + 1 === posts.length) {
       return (
         <Video
