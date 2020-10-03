@@ -48,6 +48,12 @@ html {
   fill: white;
 }
 
+.app__error {
+  color: white;
+  padding: 30px;
+  font-size: 14px;
+}
+
 .app__videos {
   position: relative;
   flex: 1;
@@ -56,7 +62,17 @@ html {
   width: 100%;
   max-width: 500px;
   scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  scroll-snap-stop: always;
 }
+
+.app__videos.app__videos--loading {
+  scroll-snap-type: none;
+}
+
+/* .app__backdrop.show {
+  display: flex;
+} */
 
 /* Hide scrollbar for Chrome, Safari & Opera */
 .app__videos::-webkit-scrollbar {

@@ -1,43 +1,88 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import GitHubIcon from '@material-ui/icons/GitHub';
+import useFetchPosts from './hooks/useFetchPosts';
 
 import './App.css';
-import axios from './apis/posts.instance';
-import Video from './components/video';
+
+import Videos from './components/videos';
+
+const Error = () => (
+  <p className="app__error">
+    Something went wrong. Please try to refresh the page.
+  </p>
+);
 
 function App() {
-  const [posts, setPosts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [allVideosLoaded, setAllVideosLoaded] = useState([]);
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await axios.get('v2/posts');
+  const { posts, loading, hasMore, error } = useFetchPosts(currentPage);
 
-        setPosts(response.data);
-      } catch (error) {
-        console.error(error);
+  const observer = useRef();
+  const scrollAreaRef = useRef();
+
+  const lastPostElementRef = useCallback(
+    node => {
+      if (loading || allVideosLoaded.length !== posts.length) return;
+
+      if (observer.current) {
+        observer.current.disconnect();
       }
-    };
+      const options = {
+        threshold: 1,
+        root: scrollAreaRef.current,
+      };
+      console.log(node);
+      observer.current = new IntersectionObserver(entries => {
+        console.log(
+          'video has fully entered in the root',
+          entries[0].isIntersecting
+        );
+        if (entries[0].isIntersecting && hasMore) {
+          setCurrentPage(prevPage => ++prevPage);
+        }
+      }, options);
 
-    fetchPosts();
-  }, []);
-
-  const videoComponents = posts.map(
-    ({ _id, url, channel, description, song, likes, shares, messages }) => (
-      <Video
-        key={_id}
-        url={url}
-        channel={channel}
-        description={description}
-        song={song}
-        likes={likes}
-        shares={shares}
-        messages={messages}
-      />
-    )
+      if (node) {
+        observer.current.observe(node);
+      }
+    },
+    [loading, hasMore, posts, allVideosLoaded]
   );
 
+  const handleVideoLoaded = () => {
+    console.log('video loaded!');
+    setAllVideosLoaded(prevLoaded => [...prevLoaded, true]);
+  };
+
+  const videoClass = loading ? 'app__videos--loading' : '';
+
+  // const videoComponents = posts.map(({ _id, loading, ...props }, index) => {
+  //   if (index + 1 === posts.length) {
+  //     return (
+  //       <Video
+  //         key={_id}
+  //         ref={lastPostElementRef}
+  //         onVideoLoaded={handleVideoLoaded}
+  //         loading={loading}
+  //         {...props}
+  //       />
+  //     );
+  //   }
+  //   return (
+  //     <Video
+  //       key={_id}
+  //       onVideoLoaded={handleVideoLoaded}
+  //       loading={loading}
+  //       {...props}
+  //     />
+  //   );
+  // });
+
   const thisYear = new Date().getFullYear();
+
+  // const backdropClass =
+  // loading || allVideosLoaded.length !== posts.length ? 'show' : '';
 
   return (
     <div className="app">
@@ -52,7 +97,20 @@ function App() {
           </a>
         </div>
       </div>
-      <div className="app__videos">{videoComponents}</div>
+      <div ref={scrollAreaRef} className={`app__videos ${videoClass}`}>
+        {/* {error ? <Error /> : loading ? <Backdrop /> : videoComponents} */}{' '}
+        {/* PENDING USE LOADVIDEO COMPONENT WHEN LOAD FIRST TIME */}
+        {error ? (
+          <Error />
+        ) : (
+          <Videos
+            posts={posts}
+            handleVideoLoaded={handleVideoLoaded}
+            lastPostElementRef={lastPostElementRef}
+            allVideosLoaded={allVideosLoaded}
+          />
+        )}
+      </div>
       <div className="app__footer">
         <p>
           © {thisYear}, developed with ♥ by{' '}
