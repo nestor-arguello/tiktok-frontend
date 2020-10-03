@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import useFetchPosts from './hooks/useFetchPosts';
+import useLastPostObserver from './hooks/useLastPostObserver';
 
 import './App.css';
 
@@ -12,43 +13,24 @@ const Error = () => (
   </p>
 );
 
+/**
+ * TODO:
+ * #1  last post animation
+ * #2  center tik tak name
+ */
+
 function App() {
   const [currentPage, setCurrentPage] = useState(1);
   const [allVideosLoaded, setAllVideosLoaded] = useState([]);
 
   const { posts, loading, hasMore, error } = useFetchPosts(currentPage);
-
-  const observer = useRef();
-  const scrollAreaRef = useRef();
-
-  const lastPostElementRef = useCallback(
-    node => {
-      if (loading || allVideosLoaded.length !== posts.length) return;
-
-      if (observer.current) {
-        observer.current.disconnect();
-      }
-      const options = {
-        threshold: 1,
-        root: scrollAreaRef.current,
-      };
-      console.log(node);
-      observer.current = new IntersectionObserver(entries => {
-        console.log(
-          'video has fully entered in the root',
-          entries[0].isIntersecting
-        );
-        if (entries[0].isIntersecting && hasMore) {
-          setCurrentPage(prevPage => ++prevPage);
-        }
-      }, options);
-
-      if (node) {
-        observer.current.observe(node);
-      }
-    },
-    [loading, hasMore, posts, allVideosLoaded]
-  );
+  const { lastPostElementRef, scrollAreaRef } = useLastPostObserver({
+    loading,
+    hasMore,
+    posts,
+    allVideosLoaded,
+    setCurrentPage,
+  });
 
   const handleVideoLoaded = () => {
     console.log('video loaded!');
@@ -56,33 +38,7 @@ function App() {
   };
 
   const videoClass = loading ? 'app__videos--loading' : '';
-
-  // const videoComponents = posts.map(({ _id, loading, ...props }, index) => {
-  //   if (index + 1 === posts.length) {
-  //     return (
-  //       <Video
-  //         key={_id}
-  //         ref={lastPostElementRef}
-  //         onVideoLoaded={handleVideoLoaded}
-  //         loading={loading}
-  //         {...props}
-  //       />
-  //     );
-  //   }
-  //   return (
-  //     <Video
-  //       key={_id}
-  //       onVideoLoaded={handleVideoLoaded}
-  //       loading={loading}
-  //       {...props}
-  //     />
-  //   );
-  // });
-
   const thisYear = new Date().getFullYear();
-
-  // const backdropClass =
-  // loading || allVideosLoaded.length !== posts.length ? 'show' : '';
 
   return (
     <div className="app">
@@ -98,8 +54,6 @@ function App() {
         </div>
       </div>
       <div ref={scrollAreaRef} className={`app__videos ${videoClass}`}>
-        {/* {error ? <Error /> : loading ? <Backdrop /> : videoComponents} */}{' '}
-        {/* PENDING USE LOADVIDEO COMPONENT WHEN LOAD FIRST TIME */}
         {error ? (
           <Error />
         ) : (
@@ -108,6 +62,7 @@ function App() {
             handleVideoLoaded={handleVideoLoaded}
             lastPostElementRef={lastPostElementRef}
             allVideosLoaded={allVideosLoaded}
+            loading={loading}
           />
         )}
       </div>

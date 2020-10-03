@@ -1,9 +1,9 @@
 import React, { useRef, useState, forwardRef } from 'react';
 
 import './Video.css';
-import VideoFooter from '../video-footer/VideoFooter';
-import VideoSidebar from '../video-sidebar/VideoSidebar';
-import LoadingVideo from './LoadingVideo';
+import VideoFooter from './VideoFooter';
+import VideoSidebar from './VideoSidebar';
+import LoadingVideo from '../loading-video';
 
 const Video = forwardRef(
   (
@@ -17,6 +17,7 @@ const Video = forwardRef(
       messages,
       onVideoLoaded,
       loadingVideo,
+      fetchingData,
     },
     ref
   ) => {
@@ -35,7 +36,7 @@ const Video = forwardRef(
 
     return (
       <div ref={ref} className="video">
-        <LoadingVideo loading={loadingVideo} />
+        <LoadingVideo loading={loadingVideo || fetchingData} />
         <video
           className="video__player"
           src={url}

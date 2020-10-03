@@ -1,7 +1,5 @@
 import React from 'react';
 
-import './Videos.css';
-
 import Video from '../video';
 
 const Videos = ({
@@ -9,6 +7,7 @@ const Videos = ({
   handleVideoLoaded,
   lastPostElementRef,
   allVideosLoaded,
+  loading,
   ...props
 }) => {
   return posts.map(({ _id, ...props }, index) => {
@@ -20,6 +19,7 @@ const Videos = ({
           ref={lastPostElementRef}
           onVideoLoaded={handleVideoLoaded}
           loadingVideo={!allVideosLoaded[index]}
+          fetchingData={loading}
           {...props}
         />
       );
